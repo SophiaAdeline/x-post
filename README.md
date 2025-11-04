@@ -4,12 +4,9 @@
 
 .github/workflows/autopost.yml
 
-file di bawah
+## API x.com
 
-## Link API
-
-1. Gemini API : https://aistudio.google.com/apikey
-2. x.com API : https://developer.x.com/en/portal/dashboard
+Buat API di https://developer.x.com/en/portal/dashboard
 
 ## Konfigurasi GitHub Secrets
 
@@ -17,7 +14,6 @@ file di bawah
 2. Klik New repository secret untuk setiap kunci API.
 3. Buat secret dengan nama-nama berikut (sesuai yang ada di file .yml dan .py):
 
-        GEMINI_API_KEY
         X_API_KEY
         X_API_SECRET
         X_BEARER_TOKEN
@@ -40,45 +36,4 @@ Salin dan tempel nilai kunci API Anda ke masing-masing secret.
 
 		All data accessed through the X API will be handled in strict accordance with our privacy policy and the X Developer Policy. We are committed to data minimization and will only request permissions for the data that is essential to deliver our services. User data will be securely stored and will not be shared with any third parties without explicit user consent. We will maintain transparent and easily accessible information about the data we collect and how it is used.
 	
-## file autopost.yml
-
-	name: Auto Post to X.com
-
-	on:
-	  workflow_dispatch: # Tombol untuk menjalankan manual di tab Actions
-	  schedule:
-		# Menjalankan 4x sehari, di jam potensial untuk audiens US (UTC)
-		# 13:00 UTC -> 9 AM ET (Pagi East Coast)
-		# 17:00 UTC -> 1 PM ET / 10 AM PT (Siang East Coast / Pagi West Coast)
-		# 22:00 UTC -> 6 PM ET / 3 PM PT (Sore)
-		# 03:00 UTC -> 11 PM ET / 8 PM PT (Malam)
-		- cron: '0 13,17,22,3 * * *'
-
-	jobs:
-	  build-and-post:
-		runs-on: ubuntu-latest
-		steps:
-		  - name: Checkout Repository
-			uses: actions/checkout@v3
-
-		  - name: Set up Python
-			uses: actions/setup-python@v4
-			with:
-			  python-version: '3.10'
-
-		  - name: Install Dependencies
-			run: |
-			  python -m pip install --upgrade pip
-			  pip install -r requirements.txt
-			  
-		  - name: Run Auto Post Script
-			# Menggunakan env untuk memasukkan API keys dari GitHub Secrets
-			env:
-			  GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-			  X_BEARER_TOKEN: ${{ secrets.X_BEARER_TOKEN }}
-			  X_API_KEY: ${{ secrets.X_API_KEY }}
-			  X_API_SECRET: ${{ secrets.X_API_SECRET }}
-			  X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
-			  X_ACCESS_TOKEN_SECRET: ${{ secrets.X_ACCESS_TOKEN_SECRET }}
-			run: python main.py
 
